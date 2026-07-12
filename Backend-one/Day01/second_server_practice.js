@@ -249,6 +249,7 @@ const gitHub = [
 ];
 const server = http.createServer((req,res)=>{
     const str_value = req.url;
+    // always remainder when ever used const make sure to declare the value warna error show hoga 
     let str_origin = "";
     for(let i = 1 ; i < str_value.length ;i++) str_origin += str_value[i];
     // str_origin mai jo number hoga ya string format mai hoga tu uska convert kar dha number format mai 
