@@ -1,0 +1,15 @@
+{
+  "name": "learnmodule-03",
+  "version": "1.0.0",
+  "description": "\"Learn module js \" ",
+  "license": "ISC",
+  "author": "Raju",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "validator": "^13.15.35"
+  }
+}
