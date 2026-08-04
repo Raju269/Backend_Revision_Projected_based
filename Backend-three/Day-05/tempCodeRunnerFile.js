@@ -1,0 +1,1 @@
+   {name:"sanu", age: 20, email:"sanu@gmail.com", amount: 900}
