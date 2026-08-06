@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Raju kumar",
+    "accountNumber": "12345",
+    "city": "delhi",
+    "age": 22,
+    "balance": 500
+  },
+  {
+    "name": "Piyush kumar",
+    "accountNumber": "123456",
+    "city": "delhi",
+    "age": 22,
+    "balance": 50
+  },
+  {
+    "name": "vikas kumar",
+    "accountNumber": "123",
+    "city": "delhi",
+    "age": 29,
+    "balance": 44
+  },
+  {
+    "name": "Yogesh kumar",
+    "accountNumber": "123",
+    "city": "delhi",
+    "age": 29,
+    "balance": 44
+  },
+  {
+    "name": "Yogesh kumar",
+    "accountNumber": "0123",
+    "city": "delhi",
+    "age": 29,
+    "balance": 44
+  },
+  {
+    "name": "Dharmendra kumar",
+    "accountNumber": "123456789",
+    "city": "delhi",
+    "age": 29,
+    "balance": 44
+  }
+]
