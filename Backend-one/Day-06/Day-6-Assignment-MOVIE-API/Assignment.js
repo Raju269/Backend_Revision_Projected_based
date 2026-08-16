@@ -11,6 +11,62 @@ app.get("/",(req,res)=>{
     res.send("Moive API is running ");
 });
 
+
+// filter Movie Using Query Parameter 
+
+app.get("/Movie",(req,res)=>{
+    const {genre,language,rating,releaseYear,availableOneOTT} = req.query;
+    let filterMovie = movies;
+
+    if(genre){
+        filterMovie = movies.filter((movies)=>{
+            return movies.genre === genre;
+        });
+    }
+    else if(language){
+        filterMovie = movies.filter((movies)=>{
+            return movies.language === language;
+        })
+    }
+    else if(rating){
+        filterMovie = movies.filter((movie)=>{
+            return movies.rating = rating;
+        })
+    }
+    else if(releaseYear){
+        filterMovie = movies.filter((movies)=>{
+            return movies.releaseYear = releaseYear
+        })
+    }
+    
+    else if(availableOneOTT){
+        filterMovie = movies.filter((movies)=>{
+            return movies.availableOnOTT = availableOneOTT
+        })
+    }
+    res.json(filterMovie);
+    
+
+})
+
+
+// Search Movie by title 
+
+app.get("/Movie", (req, res) => {
+    const { title } = req.query;
+
+    let filterMovie = movies;
+
+    if (title) {
+        filterMovie = movies.filter((movie) => {
+            return movie.title
+                .toLowerCase()
+                .includes(title.toLowerCase());
+        });
+    }
+
+    res.json(filterMovie);
+});
 // All movie data 
 app.get("/Movie",(req,res)=>{
     res.json(movies);
@@ -28,71 +84,29 @@ app.get("/Movie/:id",(req,res)=>{
     res.json(index);
 })
 
-// filter Movie Using Query Parameter 
 
-app.get("/Movie",(req,res)=>{
-    const {genre,language,rating,releaseYear,availableOneOTT} = req.query;
-    let filterMovie = movies;
-
-    if(genre){
-        filterMovie = movies.filter((movies)=>{
-            return movies.genre === genre;
-        });
-    }
-    if(language){
-        filterMovie = movies.filter((movies)=>{
-            return movies.language === language;
-        })
-    }
-    if(rating){
-        filterMovie = movies.filter((movie)=>{
-            return movies.rating = rating;
-        })
-    }
-    if(releaseYear){
-        filterMovie = movies.filter((movies)=>{
-            return movies.releaseYear = releaseYear
-        })
-    }
-    
-    if(availableOneOTT){
-        filterMovie = movies.filter((movies)=>{
-            return movies.availableOnOTT = availableOneOTT
-        })
-    }
-    res.json(filterMovie);
-    
-
-})
-
-
-// Search Movie by title 
-
-app.get("Movies",(req,res)=>{
-    
-})
 
 
 // Create a New Movei
 
-app.post("/Movie",(req,res)=>{
-    const newMovie = {
-        id: movies.length+1,
-        title = req.body.title,
-        genre = req.body.genre,
-        language = req.body.language,
-        rating = req.body.rating,
-        releaseYear = req.body.releaseYear,
-        duration = req.body.duration,
-        availableOneOTT = req.body.availableOneOTT
+// app.post("/Movie",(req,res)=>{
+//     const newMovie = {
+//         id: movies.length+1,
+//         title = req.body.title,
+//         genre = req.body.genre,
+//         language = req.body.language,
+//         rating = req.body.rating,
+//         releaseYear = req.body.releaseYear,
+//         duration = req.body.duration,
+//         availableOneOTT = req.body.availableOneOTT
 
-    }
-    movies.push(newMovie);
-    res.status(201).json({
-        message:"Movie created successfully",
-        movies : newMovie
-    })
-})
+//     }
+//     movies.push(newMovie);
+//     res.status(201).json({
+//         message:"Movie created successfully",
+//         movies : newMovie
+//     })
+// })
 
 // Update Movie using patch 
 app.patch('/Movie/:id',(req,res)=>{
