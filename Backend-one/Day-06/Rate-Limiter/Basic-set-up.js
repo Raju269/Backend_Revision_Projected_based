@@ -46,6 +46,35 @@ const products = [
     category: "tv",
     inStock: false
   }
+  ,
+   {    id:4,
+        name: "iPhone 15",
+        price : 30000,
+        rating:3.4,
+        category: "electronics",
+        inStock: true
+    },
+    {   id : 5,
+        name: "Samsung Galaxy",
+        price : 30000,
+        rating:3.4,
+        category: "electronics",
+        inStock: false
+    },
+    {   id:6,
+        name: "Nike Shoes",
+        price : 30000,
+        rating:3.4,
+        category: "fashion",
+        inStock: true
+    },
+    {   id : 7,
+        name: "Laptop",
+        price : 30000,
+        rating:3.4,
+        category: "electronics",
+        inStock: true
+    }
 ];
 
 // HOme Route
@@ -53,6 +82,67 @@ app.get("/",(req,res)=>{
     res.send("Product API is running ");
 })
 
+// Get all products + query filtering
+
+// Query parameter 
+// app.get("/products", (req, res) => {
+//     const { category, inStock } = req.query;
+//     let filteredProduct = products;
+
+//     if (category) {
+//         filteredProduct = filteredProduct.filter((product) => {
+//             return product.category === category;
+//         });
+//     }
+    
+//     if (inStock !== undefined) {
+//         // Convert string to boolean
+//         const inStockBoolean = inStock === 'true';
+//         filteredProduct = filteredProduct.filter((product) => {
+//             return product.inStock === inStockBoolean;
+//         });
+//     }
+    
+//     res.json(filteredProduct);
+// });
+
+
+
+// Search Query paramter 
+app.get("/products", (req, res) => {
+    const { category, inStock, search } = req.query;
+
+    let filteredProducts = products;
+
+    // Filter by category
+    if (category) {
+        filteredProducts = filteredProducts.filter((product) => {
+            return product.category === category;
+        });
+    }
+
+    // Filter by stock
+    if (inStock !== undefined) {
+        const inStockBoolean = inStock === "true";
+
+        filteredProducts = filteredProducts.filter((product) => {
+            return product.inStock === inStockBoolean;
+        });
+    }
+
+    // Search by product name
+   // Search
+    if (search) {
+        filteredProducts = filteredProducts.filter((product) => {
+            return product.name
+                .toLowerCase()
+                .includes(search.toLowerCase());
+        });
+    }
+
+    res.json(filteredProducts);
+
+});
 app.get("/products",(req,res)=>{
     res.json(products);
 })
@@ -69,69 +159,6 @@ app.get("/products/:id",(req,res)=>{
     }
     res.json(product);
 })
-
-// Query Parameter and Query 
-app.get("/products",(req,res)=>{
-    const {category, inStock } = req.query;
-    let filteredProduct = products;
-
-    if(category){
-        filteredProduct = filteredProduct.filter((product)=>{
-            return  product.category === category;
-        })
-    }
-    if(inStock){
-        filteredProduct = filteredProduct.filter((product)=>{
-            return product.inStock === inStock;
-        })
-    }
-    res.json(filteredProduct);
-})
-
-// ya wala doubt mai hai 
-app.get("/products", (req, res) => {
-  const { category, inStock } = req.query;
-
-  let filteredProducts = products;
-
-  if (category) {
-    filteredProducts = filteredProducts.filter((product) => {
-      return product.category === category;
-    });
-  }
-
-  if (inStock) {
-    filteredProducts = filteredProducts.filter((product) => {
-      return product.inStock === (inStock === "true");
-    });
-  }
-
-  res.json(filteredProducts);
-});
-
-
-// Search Query paramter 
-// app.get("/products",(req,res)=>{
-//     const {category, inStock ,search } = req.query;
-//     let filterProduct = products;
-
-//     if(category){
-//         filterProduct = filterProduct.filter((product)=>{
-//             return  product.category === category;
-//         })
-//     }
-//     if(inStock){
-//         filterProduct = filterProduct.filter((product)=>{
-//             return product.inStock ===( inStock === "true");
-//         })
-//     }
-//     if(search){
-//         filterProduct = filterProduct.find((product)=>{
-//             return product.name.toLowerCase().includes(search.toLowerCase());
-//         })
-//     }
-//     res.json(filterProduct);
-// })
 
 app.get("/products", (req, res) => {
     const { category, inStock, search } = req.query;
