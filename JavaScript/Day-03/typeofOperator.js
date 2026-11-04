@@ -1,0 +1,16 @@
+let a = 34;
+let b = "Raju";
+let c = 234.34324;
+let d = true;
+let e = 324234n;
+let f;
+let g = null; 
+let id1 = Symbol('1');
+console.log(typeof a);
+console.log(typeof b);
+console.log(typeof c);
+console.log(typeof d);
+console.log(typeof e);
+console.log(typeof f);
+console.log(typeof g);
+console.log(typeof id1);
