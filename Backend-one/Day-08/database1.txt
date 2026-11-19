@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Piyush",
+    "accountNumber": "1001",
+    "city": "Delhi",
+    "age": 27,
+    "balance": 12300
+  },
+  {
+    "name": "Raju",
+    "accountNumber": "1002",
+    "city": "Goa",
+    "age": 24,
+    "balance": 2300
+  },
+  {
+    "name": "vikas",
+    "accountNumber": "1003",
+    "city": "PUNE",
+    "age": 20,
+    "balance": 7300
+  }
+]
