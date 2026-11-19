@@ -1,0 +1,23 @@
+[
+  {
+    "name": "hemant",
+    "accountNumber": "1002",
+    "city": "Mubmai",
+    "age": 37,
+    "balance": 89000
+  },
+  {
+    "name": "Piyush",
+    "accountNumber": "1003",
+    "city": "Mubmai",
+    "age": 37,
+    "balance": 89000
+  },
+  {
+    "name": "Raju",
+    "accountNumber": "1004",
+    "city": "Mubmai",
+    "age": 37,
+    "balance": 89000
+  }
+]
