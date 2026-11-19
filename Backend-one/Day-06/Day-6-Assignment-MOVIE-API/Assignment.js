@@ -1,202 +1,245 @@
 import express from "express";
-import { movies } from "./movie.js";
-import { availableMemory, title } from "node:process";
-import { json } from "node:stream/consumers";
-import { relative } from "node:path";
+import{ movies} from './movie.js';
+import { title } from "node:process";
 
 const app = express();
-const PORT = 3000; 
+const PORT = 3000;
+app.use(express.json());
 
+// TODO Home routes 
 app.get("/",(req,res)=>{
-    res.send("Moive API is running ");
-});
+    res.send("Movie API is running ");
+})
 
+// TODO 2. Filter Movies Using Query Parameter 
 
-// filter Movie Using Query Parameter 
-
-app.get("/Movie",(req,res)=>{
-    const {genre,language,rating,releaseYear,availableOneOTT} = req.query;
-    let filterMovie = movies;
+app.get("/movies",(req,res)=>{
+    const {genre,language,rating,releaseYear,avaiableOneOTT} = req.query;
+    let filterMove = movies;
 
     if(genre){
-        filterMovie = movies.filter((movies)=>{
+        filterMove = movies.filter((movies)=>{
             return movies.genre === genre;
-        });
+        })
     }
-    else if(language){
-        filterMovie = movies.filter((movies)=>{
+
+    if(language){
+        filterMove = movies.filter((movies)=>{
             return movies.language === language;
         })
     }
-    else if(rating){
-        filterMovie = movies.filter((movie)=>{
-            return movies.rating = rating;
+    if(rating){
+        filterMove = movies.filter((movies)=>{
+            return movies.rating === rating;
         })
     }
-    else if(releaseYear){
-        filterMovie = movies.filter((movies)=>{
-            return movies.releaseYear = releaseYear
+    if(releaseYear){
+        releaseYear = movies.filter((movies)=>{
+            return releaseYear === releaseYear;
         })
     }
-    
-    else if(availableOneOTT){
-        filterMovie = movies.filter((movies)=>{
-            return movies.availableOnOTT = availableOneOTT
+
+    if(avaiableOneOTT){
+        filterMove = movies.filter((movies)=>{
+            return avaiableOneOTT === avaiableOneOTT;
         })
     }
-    res.json(filterMovie);
-    
+    res.json({
+        filterMove
+    });
+});
 
-})
-
-
-// Search Movie by title 
-
-app.get("/Movie", (req, res) => {
-    const { title } = req.query;
+// TODO 3. Search Movies by Title 
+app.get("/movies",(req,res)=>{
+    const {title} = req.query;
 
     let filterMovie = movies;
 
-    if (title) {
-        filterMovie = movies.filter((movie) => {
-            return movie.title
-                .toLowerCase()
-                .includes(title.toLowerCase());
+    if(title){
+        filterMovie = movies.filter((movies)=>{
+            return movies.title
+            .toLowerCase()
+            .includes(title.toLowerCase())
+        });
+    };
+
+    res.json({
+        filterMovie
+    });
+});
+
+
+// TODO 4.A ALL Movie data 
+
+app.get('/movies',(req,res)=>{
+    res.json({
+        movies
+    });
+});
+// TODO GET Single Movie by ID
+app.get("/movies/:id", (req, res) => {
+
+    // Get ID from URL
+    const id = Number(req.params.id);
+
+    // Find movie by ID
+    const movie = movies.find((movie) => {
+        return movie.id === id;
+    });
+
+    // Check if movie exists
+    if (!movie) {
+        return res.status(404).json({
+            message: "Movie is not Found"
         });
     }
 
-    res.json(filterMovie);
+    // Return movie
+    res.status(200).json(movie);
 });
-// All movie data 
-app.get("/Movie",(req,res)=>{
-    res.json(movies);
-})
-// Get single Movie using Route params / Route parameter 
-app.get("/Movie/:id",(req,res)=>{
-    const id = Number(req.params.id);
 
-    const index = movies.find((movies)=>movies.id === id);
-    if(!index){
-        return res.status(404).json({
-            message:"Movie is not found"
-        })
+// TODO 6. Create New Movie 
+
+// Create a new movie
+app.post("/movies", (req, res) => {
+
+    const newMovie = {
+        id: movies.length + 1,
+        title: req.body.title,
+        genre: req.body.genre,
+        language: req.body.language,
+        rating: req.body.rating,
+        releaseYear: req.body.releaseYear,
+        duration: req.body.duration,
+        availableOnOTT: req.body.availableOnOTT
     };
-    res.json(index);
-})
 
+    movies.push(newMovie);
 
+    res.status(201).json({
+        message: "Movie Created Successfully",
+        movie: newMovie
+    });
+});
 
+// TODO Update : Moves using patch 
+// Update Movie Using PATCH
+app.patch("/movies/:id", (req, res) => {
 
-// Create a New Movei
-
-// app.post("/Movie",(req,res)=>{
-//     const newMovie = {
-//         id: movies.length+1,
-//         title = req.body.title,
-//         genre = req.body.genre,
-//         language = req.body.language,
-//         rating = req.body.rating,
-//         releaseYear = req.body.releaseYear,
-//         duration = req.body.duration,
-//         availableOneOTT = req.body.availableOneOTT
-
-//     }
-//     movies.push(newMovie);
-//     res.status(201).json({
-//         message:"Movie created successfully",
-//         movies : newMovie
-//     })
-// })
-
-// Update Movie using patch 
-app.patch('/Movie/:id',(req,res)=>{
     const id = Number(req.params.id);
 
-    const movie = movies.find((movies)=>movie.id===id);
+    // Find movie by ID
+    const movie = movies.find((movie) => movie.id === id);
 
-    if(!movie){
+    if (!movie) {
         return res.status(404).json({
-            message:"Movie is not found"
-        })
+            message: "Movie is not found"
+        });
     }
-    if(req.body.id !== undefined){
-        movie.id = req.body.id
+
+    // Update only the fields received in request body
+    if (req.body.title !== undefined) {
+        movie.title = req.body.title;
     }
-    if(req.body.title !== undefined){
-        movie.title = req.body.title
+
+    if (req.body.genre !== undefined) {
+        movie.genre = req.body.genre;
     }
-    if(req.body.genre !== undefined){
-        movie.body.genre = req.body.genre
+
+    if (req.body.language !== undefined) {
+        movie.language = req.body.language;
     }
-    if(req.body.language !== undefined){
-        movie.body.language = req.body.language
+
+    if (req.body.rating !== undefined) {
+        movie.rating = req.body.rating;
     }
-    if(req.body.rating !== undefined){
-        movie.body.rating = req.body.rating
+
+    if (req.body.releaseYear !== undefined) {
+        movie.releaseYear = req.body.releaseYear;
     }
-    if(req.body.releaseYear !== undefined){
-        movie.body.releaseYear = req.body.releaseYear
+
+    if (req.body.duration !== undefined) {
+        movie.duration = req.body.duration;
     }
-    if(req.body.duration !== undefined){
-        movie.body.duration = req.body.duration
+
+    if (req.body.availableOnOTT !== undefined) {
+        movie.availableOnOTT = req.body.availableOnOTT;
     }
-    if(req.body.availableOneOTT !== undefined){
-        movie.body.availableOneOTT = req.body.availableOneOTT
-    }
-    res.json({
-        message: "Movie is Update",
+
+    res.status(200).json({
+        message: "Movie updated successfully",
         movie
     });
-})
+});
+//TODO  Replace movie using PUT 
 
+// Replace Movie Using PUT
+app.put("/movies/:id", (req, res) => {
 
-// Replace movie using PUT 
-app.put("/movie/:id",(req,res)=>{
     const id = Number(req.params.id);
 
-    const Replace = movies.find((movies)=>movies.id===id);
+    // Find index of movie
+    const index = movies.findIndex((movie) => {
+        return movie.id === id;
+    });
 
-    if(!Replace){
-        return res.status(404)/json({
-            message:"User is not found"
-        })
+    // Check if movie exists
+    if (index === -1) {
+        return res.status(404).json({
+            message: "Movie is not found"
+        });
     }
 
-    const NewMovies  = {
-        id:id,
-        title:req.body.title,
+    // Create completely new movie object
+    const newMovie = {
+        id: id,
+        title: req.body.title,
         genre: req.body.genre,
-        language:req.body.language,
-        rating:req.body.rating,
-        releaseYear:req.body.releaseYear,
-        duration:req.body.duration,
-        availableOneOTT:req.body.availableOneOTT
-    }
-    movies[Replace] = NewMovies;
-    res.json({
-        message:"Move Replace successful",
-        movies : Replace
-    })
-})
+        language: req.body.language,
+        rating: req.body.rating,
+        releaseYear: req.body.releaseYear,
+        duration: req.body.duration,
+        availableOnOTT: req.body.availableOnOTT
+    };
 
-// Delete Movie 
-app.delete('/Movie/:id',(req,res)=>{
+    // Replace old movie with new movie
+    movies[index] = newMovie;
+
+    res.status(200).json({
+        message: "Movie replaced successfully",
+        movie: newMovie
+    });
+});
+// TODO Delete Movie 
+// Delete Movie Using DELETE
+app.delete("/movies/:id", (req, res) => {
+
     const id = Number(req.params.id);
-    const index = movies.find((movies)=>movies.id===id);
-    if(!index){
-        return res.json({
-            menubar:"Movie is not found"
-        })
+
+    // Find index of movie
+    const index = movies.findIndex((movie) => {
+        return movie.id === id;
+    });
+
+    // Check if movie exists
+    if (index === -1) {
+        return res.status(404).json({
+            message: "Movie is not found"
+        });
     }
 
-    const deleteMovie = movies.splice(index,1);
+    // Delete movie from array
+    const deleteMovie = movies.splice(index, 1);
 
-    res.json({
-        message:"Movie is delete successfull",
-        movies:deleteMovie[0]
-    })
-})
+    res.status(200).json({
+        message: "Movie deleted successfully",
+        movie: deleteMovie[0]
+    });
+});
+
+// TODO Bonus TASK 
+
+// TODO Bonus TASK 2
 app.listen(PORT,(req,res)=>{
     console.log(`Server is running at ${PORT}`);
-
 })
